@@ -74,7 +74,10 @@ jobs:
           fi
 
       - name: Install xcodegen
-        run: brew install xcodegen
+        run: |
+          set -eo pipefail
+          brew install xcodegen
+          xcodegen --version
 
       - name: Import signing certificate
         if: steps.signmode.outputs.mode == 'developer_id'
@@ -96,6 +99,19 @@ jobs:
 
       - name: Generate Xcode project
         run: cd App && xcodegen generate
+
+      # Homebrew often ships XcodeGen 2.44.x: defaults to objectVersion 77 and ignores projectFormat (2.45+).
+      # macos-14 runners use Xcode 15.4, which cannot open format 77.
+      - name: Coerce pbxproj for Xcode 15 runner
+        run: |
+          set -eo pipefail
+          PBX="$GITHUB_WORKSPACE/App/TubeBackdrop.xcodeproj/project.pbxproj"
+          if grep -q 'objectVersion = 77' "$PBX"; then
+            echo "::warning::Patching objectVersion 77 → 60 for Xcode 15.4 (brew XcodeGen without projectFormat support)."
+            sed -i '' 's/objectVersion = 77;/objectVersion = 60;/' "$PBX"
+            sed -i '' 's/compatibilityVersion = "Xcode 16[^"]*"/compatibilityVersion = "Xcode 15.0"/' "$PBX" || true
+          fi
+          grep -E 'objectVersion|compatibilityVersion' "$PBX" | head -6
 
       - name: Build Release
         env:
