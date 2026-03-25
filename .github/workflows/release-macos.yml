@@ -26,10 +26,31 @@ jobs:
   release:
     runs-on: macos-14
     steps:
+      # workflow_dispatch cannot use refs/tags/... here: checkout fails before our steps if the tag does not exist yet.
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event_name == 'workflow_dispatch' && format('refs/tags/{0}', inputs.version_tag) || github.ref }}
+          ref: ${{ github.event_name == 'workflow_dispatch' && github.event.repository.default_branch || github.ref }}
           fetch-depth: 0
+          fetch-tags: true
+
+      - name: Checkout requested tag
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          set -eo pipefail
+          TAG="${{ inputs.version_tag }}"
+          TAG="${TAG#refs/tags/}"
+          if [[ "${TAG}" != v*.*.* ]]; then
+            echo "::error::version_tag must look like v1.2.3 (got: ${TAG})"
+            exit 1
+          fi
+          git fetch origin --tags
+          if ! git rev-parse -q --verify "refs/tags/${TAG}" >/dev/null; then
+            echo "::error::Tag '${TAG}' does not exist on GitHub yet. Run **Actions → Deploy release** (patch/minor/major) to bump and push the tag, then run this workflow again. Or enter an existing tag below."
+            echo "Tags on origin (sample):" >&2
+            git ls-remote --tags origin 'refs/tags/v*' | tail -25 >&2 || true
+            exit 1
+          fi
+          git checkout "${TAG}"
 
       - name: Require Sparkle signing key
         env:
