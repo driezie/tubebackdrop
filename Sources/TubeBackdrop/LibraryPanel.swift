@@ -21,7 +21,8 @@ struct LibraryPanel: View {
       .padding(24)
       .frame(maxWidth: .infinity, alignment: .leading)
     }
-    .background(Color(nsColor: .windowBackgroundColor).opacity(0.35))
+    .frame(maxWidth: .infinity, maxHeight: .infinity)
+    .background(Color(nsColor: .windowBackgroundColor))
     .onAppear {
       store.ensureDefaultProject()
       store.refreshDownloadedState()
@@ -29,16 +30,12 @@ struct LibraryPanel: View {
   }
 
   private var header: some View {
-    VStack(alignment: .leading, spacing: 6) {
+    VStack(alignment: .leading, spacing: 4) {
       Text("Library")
-        .font(.largeTitle.weight(.bold))
-      Text(
-        "Downloaded videos can play as a fullscreen desktop layer behind your icons. "
-          + "Assign a project, category, environment, or linked database file from Databases to organize items and search them with ⌘K."
-      )
-        .font(.callout)
+        .font(.title.weight(.bold))
+      Text("Videos and downloads · ⌘K to search")
+        .font(.subheadline)
         .foregroundStyle(.secondary)
-        .fixedSize(horizontal: false, vertical: true)
     }
   }
 
@@ -189,12 +186,12 @@ struct LibraryPanel: View {
       }
     }
     .background(
-      RoundedRectangle(cornerRadius: 12, style: .continuous)
-        .fill(.background.opacity(0.65))
+      RoundedRectangle(cornerRadius: 10, style: .continuous)
+        .fill(Color(nsColor: .controlBackgroundColor))
     )
     .overlay(
-      RoundedRectangle(cornerRadius: 12, style: .continuous)
-        .strokeBorder(.white.opacity(0.06), lineWidth: 1)
+      RoundedRectangle(cornerRadius: 10, style: .continuous)
+        .strokeBorder(Color(nsColor: .separatorColor), lineWidth: 1)
     )
   }
 

@@ -26,7 +26,8 @@ struct DatabasesPanel: View {
       .padding(24)
       .frame(maxWidth: .infinity, alignment: .leading)
     }
-    .background(Color(nsColor: .windowBackgroundColor).opacity(0.35))
+    .frame(maxWidth: .infinity, maxHeight: .infinity)
+    .background(Color(nsColor: .windowBackgroundColor))
     .onDrop(of: [.fileURL], isTargeted: nil) { providers in
       handleDropProviders(providers)
     }
@@ -63,14 +64,10 @@ struct DatabasesPanel: View {
   private var header: some View {
     VStack(alignment: .leading, spacing: 10) {
       Text("Databases")
-        .font(.largeTitle.weight(.bold))
-      Text(
-        "Connect downloaded data files to a project and environment (localhost, development, staging, live). "
-          + "Tag with categories, then find them in ⌘K search. Drag files here or use Upload."
-      )
-      .font(.callout)
-      .foregroundStyle(.secondary)
-      .fixedSize(horizontal: false, vertical: true)
+        .font(.title.weight(.bold))
+      Text("Projects, files, drag-and-drop · ⌘K")
+        .font(.subheadline)
+        .foregroundStyle(.secondary)
 
       HStack(spacing: 10) {
         Button {
@@ -271,11 +268,11 @@ struct DatabasesPanel: View {
   }
 
   private var cardBackground: some View {
-    RoundedRectangle(cornerRadius: 12, style: .continuous)
-      .fill(.background.opacity(0.65))
+    RoundedRectangle(cornerRadius: 10, style: .continuous)
+      .fill(Color(nsColor: .controlBackgroundColor))
       .overlay(
-        RoundedRectangle(cornerRadius: 12, style: .continuous)
-          .strokeBorder(.white.opacity(0.06), lineWidth: 1)
+        RoundedRectangle(cornerRadius: 10, style: .continuous)
+          .strokeBorder(Color(nsColor: .separatorColor), lineWidth: 1)
       )
   }
 

@@ -9,13 +9,12 @@ struct AddVideoPanel: View {
   var body: some View {
     ScrollView {
       VStack(alignment: .leading, spacing: 20) {
-        VStack(alignment: .leading, spacing: 6) {
+        VStack(alignment: .leading, spacing: 4) {
           Text("Add video")
-            .font(.largeTitle.weight(.bold))
-          Text("Paste a YouTube URL. It is saved to your library; download from Library when ready.")
-            .font(.callout)
+            .font(.title.weight(.bold))
+          Text("Paste a YouTube URL")
+            .font(.subheadline)
             .foregroundStyle(.secondary)
-            .fixedSize(horizontal: false, vertical: true)
         }
 
         VStack(alignment: .leading, spacing: 12) {
@@ -47,23 +46,19 @@ struct AddVideoPanel: View {
         .padding(18)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
-          RoundedRectangle(cornerRadius: 12, style: .continuous)
-            .fill(.background.opacity(0.65))
+          RoundedRectangle(cornerRadius: 10, style: .continuous)
+            .fill(Color(nsColor: .controlBackgroundColor))
         )
         .overlay(
-          RoundedRectangle(cornerRadius: 12, style: .continuous)
-            .strokeBorder(.white.opacity(0.06), lineWidth: 1)
+          RoundedRectangle(cornerRadius: 10, style: .continuous)
+            .strokeBorder(Color(nsColor: .separatorColor), lineWidth: 1)
         )
-
-        Text("Tip: Press ⌘K anytime to search the library or paste a link.")
-          .font(.callout)
-          .foregroundStyle(.tertiary)
       }
       .padding(24)
       .frame(maxWidth: 560, alignment: .leading)
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-    .background(Color(nsColor: .windowBackgroundColor).opacity(0.35))
+    .background(Color(nsColor: .windowBackgroundColor))
   }
 
   private func addURL() {

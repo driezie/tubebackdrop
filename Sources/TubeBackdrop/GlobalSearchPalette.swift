@@ -11,7 +11,7 @@ struct GlobalSearchPalette: View {
 
   var body: some View {
     ZStack {
-      Color.black.opacity(0.45)
+      Color.black.opacity(0.5)
         .ignoresSafeArea()
         .onTapGesture { dismiss() }
 
@@ -55,10 +55,10 @@ struct GlobalSearchPalette: View {
       }
       .frame(width: 520)
       .background {
-        RoundedRectangle(cornerRadius: 14, style: .continuous)
-          .fill(.ultraThickMaterial)
-        RoundedRectangle(cornerRadius: 14, style: .continuous)
-          .strokeBorder(.white.opacity(0.08), lineWidth: 1)
+        RoundedRectangle(cornerRadius: 12, style: .continuous)
+          .fill(Color(nsColor: .windowBackgroundColor))
+        RoundedRectangle(cornerRadius: 12, style: .continuous)
+          .strokeBorder(Color(nsColor: .separatorColor), lineWidth: 1)
       }
       .shadow(color: .black.opacity(0.35), radius: 28, y: 14)
     }

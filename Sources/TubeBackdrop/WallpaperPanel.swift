@@ -9,13 +9,12 @@ struct WallpaperPanel: View {
   var body: some View {
     ScrollView {
       VStack(alignment: .leading, spacing: 20) {
-        VStack(alignment: .leading, spacing: 6) {
+        VStack(alignment: .leading, spacing: 4) {
           Text("Wallpaper")
-            .font(.largeTitle.weight(.bold))
-          Text("Video plays behind the desktop on all displays. Uses a desktop-level window (not a replacement wallpaper image).")
-            .font(.callout)
+            .font(.title.weight(.bold))
+          Text("Fullscreen video behind the desktop")
+            .font(.subheadline)
             .foregroundStyle(.secondary)
-            .fixedSize(horizontal: false, vertical: true)
         }
 
         HStack(alignment: .top, spacing: 16) {
@@ -53,8 +52,8 @@ struct WallpaperPanel: View {
                 .padding(.horizontal, 14)
                 .padding(.vertical, 10)
                 .background(
-                  RoundedRectangle(cornerRadius: 10, style: .continuous)
-                    .fill(.white.opacity(0.06))
+                  RoundedRectangle(cornerRadius: 8, style: .continuous)
+                    .fill(Color(nsColor: .controlBackgroundColor))
                 )
               }
               .buttonStyle(.plain)
@@ -64,18 +63,19 @@ struct WallpaperPanel: View {
         .padding(18)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
-          RoundedRectangle(cornerRadius: 12, style: .continuous)
-            .fill(.background.opacity(0.65))
+          RoundedRectangle(cornerRadius: 10, style: .continuous)
+            .fill(Color(nsColor: .controlBackgroundColor))
         )
         .overlay(
-          RoundedRectangle(cornerRadius: 12, style: .continuous)
-            .strokeBorder(.white.opacity(0.06), lineWidth: 1)
+          RoundedRectangle(cornerRadius: 10, style: .continuous)
+            .strokeBorder(Color(nsColor: .separatorColor), lineWidth: 1)
         )
       }
       .padding(24)
       .frame(maxWidth: .infinity, alignment: .leading)
     }
-    .background(Color(nsColor: .windowBackgroundColor).opacity(0.35))
+    .frame(maxWidth: .infinity, maxHeight: .infinity)
+    .background(Color(nsColor: .windowBackgroundColor))
     .onAppear { store.refreshDownloadedState() }
   }
 
@@ -101,15 +101,15 @@ struct WallpaperPanel: View {
       .buttonStyle(.borderedProminent)
       .tint(.red.opacity(0.85))
     }
-    .padding(20)
+    .padding(18)
     .frame(maxWidth: 400, alignment: .leading)
     .background(
-      RoundedRectangle(cornerRadius: 12, style: .continuous)
-        .fill(.ultraThinMaterial)
+      RoundedRectangle(cornerRadius: 10, style: .continuous)
+        .fill(Color(nsColor: .controlBackgroundColor))
     )
     .overlay(
-      RoundedRectangle(cornerRadius: 12, style: .continuous)
-        .strokeBorder(.white.opacity(0.08), lineWidth: 1)
+      RoundedRectangle(cornerRadius: 10, style: .continuous)
+        .strokeBorder(Color(nsColor: .separatorColor), lineWidth: 1)
     )
   }
 

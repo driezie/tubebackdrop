@@ -8,11 +8,20 @@ struct DashboardShellView: View {
 
   @State private var dashboardImportDraft: DatabaseImportDraft?
 
+  private let sidebarWidth: CGFloat = 232
+
   var body: some View {
     ZStack {
-      NavigationSplitView {
+      HStack(spacing: 0) {
         DashboardSidebar(selection: $chrome.sidebarSelection)
-      } detail: {
+          .frame(width: sidebarWidth)
+          .frame(maxHeight: .infinity)
+
+        Rectangle()
+          .fill(Color(nsColor: .separatorColor))
+          .frame(width: 1)
+          .frame(maxHeight: .infinity)
+
         NavigationStack {
           detailRow
             .navigationTitle(chrome.sidebarSelection.title)
@@ -25,8 +34,11 @@ struct DashboardShellView: View {
               }
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color(nsColor: .windowBackgroundColor))
       }
-      .navigationSplitViewColumnWidth(min: 220, ideal: 250, max: 320)
+      .frame(maxWidth: .infinity, maxHeight: .infinity)
+      .background(Color(nsColor: .windowBackgroundColor))
 
       if chrome.isGlobalSearchPresented {
         GlobalSearchPalette(
@@ -41,7 +53,6 @@ struct DashboardShellView: View {
       }
     }
     .animation(.easeOut(duration: 0.16), value: chrome.isGlobalSearchPresented)
-    .background(Color(nsColor: .windowBackgroundColor))
     .preferredColorScheme(.dark)
     .sheet(item: $dashboardImportDraft) { draft in
       ImportDatabaseSheet(urls: draft.urls) {
@@ -49,7 +60,6 @@ struct DashboardShellView: View {
       }
       .environmentObject(store)
     }
-    // Single-parameter onChange is required for macOS 13 deployment; two-parameter form is macOS 14+ only.
     .onChange(of: chrome.pendingDatabaseImport) { newValue in
       guard let draft = newValue else { return }
       dashboardImportDraft = DatabaseImportDraft(urls: draft.urls)
