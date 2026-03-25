@@ -3,6 +3,8 @@ options:
   bundleIdPrefix: com.tubebackdrop
   deploymentTarget:
     macOS: "13.0"
+  # GitHub macos-14 runner uses Xcode 15.x; default xcode16_0 → objectVersion 77 fails there.
+  projectFormat: xcode15_0
   xcodeVersion: "15.0"
   groupSortPosition: top
 
