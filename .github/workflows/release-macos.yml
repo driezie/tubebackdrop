@@ -28,6 +28,12 @@ jobs:
     # macos-14 defaults to Xcode 15.4; local dev often uses much newer Xcode → CI-only Swift/build failures (xcodebuild exit 65).
     runs-on: macos-15
     steps:
+      - name: Runner / Xcode context
+        run: |
+          echo "::notice::release-macos: macos-15, FORCE_NODE24, Manual ad-hoc signing"
+          sw_vers
+          xcodebuild -version
+
       # workflow_dispatch cannot use refs/tags/... here: checkout fails before our steps if the tag does not exist yet.
       - uses: actions/checkout@v6
         with:
@@ -121,16 +127,21 @@ jobs:
         run: |
           set -eo pipefail
           DERIVED="${RUNNER_TEMP}/DerivedData"
+          LOG="${RUNNER_TEMP}/xcodebuild-release.log"
           cd App
           if [ "${{ steps.signmode.outputs.mode }}" = "developer_id" ]; then
+            set +e
             xcodebuild -scheme TubeBackdrop -configuration Release \
               -destination "generic/platform=macOS" \
               -derivedDataPath "${DERIVED}" \
               DEVELOPMENT_TEAM="${DEVELOPMENT_TEAM}" \
               CODE_SIGN_IDENTITY="Developer ID Application" \
-              build
+              build 2>&1 | tee "${LOG}"
+            XC=${PIPESTATUS[0]}
+            set -e
           else
             # Manual + "-" ad-hoc signing: avoids Automatic signing with an empty DEVELOPMENT_TEAM (often fails on CI as xcodebuild exit 65).
+            set +e
             xcodebuild -scheme TubeBackdrop -configuration Release \
               -destination "generic/platform=macOS" \
               -derivedDataPath "${DERIVED}" \
@@ -138,7 +149,14 @@ jobs:
               CODE_SIGN_IDENTITY="-" \
               DEVELOPMENT_TEAM="" \
               ENABLE_HARDENED_RUNTIME=NO \
-              build
+              build 2>&1 | tee "${LOG}"
+            XC=${PIPESTATUS[0]}
+            set -e
+          fi
+          if [ "${XC}" -ne 0 ]; then
+            echo "::error::xcodebuild failed (exit ${XC}). Last 150 lines:"
+            tail -150 "${LOG}" >&2
+            exit "${XC}"
           fi
           echo "APP_PATH=${DERIVED}/Build/Products/Release/TubeBackdrop.app" >> "$GITHUB_ENV"
 

@@ -49,6 +49,7 @@ struct DashboardShellView: View {
       }
       .environmentObject(store)
     }
+    // Single-parameter onChange is required for macOS 13 deployment; two-parameter form is macOS 14+ only.
     .onChange(of: chrome.pendingDatabaseImport) { newValue in
       guard let draft = newValue else { return }
       dashboardImportDraft = DatabaseImportDraft(urls: draft.urls)

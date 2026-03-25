@@ -183,7 +183,8 @@ struct LibraryPanel: View {
             }
           }
         }
-        .listStyle(.inset(alternatesRowBackgrounds: true))
+        // `.inset(alternatesRowBackgrounds:)` is macOS 14+; deployment target is 13.
+        .listStyle(.inset)
         .frame(minHeight: 280)
       }
     }
