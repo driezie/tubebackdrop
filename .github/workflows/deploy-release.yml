@@ -1,6 +1,6 @@
 name: Deploy release
 
-# One-click: bump version in App/project.yml, push to branch, tag → triggers Release macOS (build, GitHub Release + changelog, appcast, optional Vercel hook).
+# One-click: bump version in App/project.yml, push to branch, tag → dispatches Release macOS (tag pushes from GITHUB_TOKEN do not fire push: workflows).
 
 on:
   workflow_dispatch:
@@ -20,6 +20,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 concurrency:
   group: deploy-release-${{ github.ref }}
@@ -74,6 +75,16 @@ jobs:
           set -eo pipefail
           git tag "${{ steps.bump.outputs.tag }}"
           git push origin "${{ steps.bump.outputs.tag }}"
+
+      - name: Trigger Release macOS
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -eo pipefail
+          gh workflow run release-macos.yml \
+            --repo "${{ github.repository }}" \
+            --ref "${{ github.ref_name }}" \
+            -f "version_tag=${{ steps.bump.outputs.tag }}"
 
       - name: Summary
         run: |
