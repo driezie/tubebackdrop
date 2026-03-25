@@ -30,7 +30,12 @@ struct DashboardShellView: View {
             }
             .toolbar {
               ToolbarItem(placement: .primaryAction) {
-                DatabaseToolbarSearch()
+                HStack(spacing: 10) {
+                  #if canImport(Sparkle)
+                  DashboardUpdateToolbarAccessory()
+                  #endif
+                  DatabaseToolbarSearch()
+                }
               }
             }
         }
@@ -51,6 +56,11 @@ struct DashboardShellView: View {
         .transition(.opacity.combined(with: .scale(scale: 0.98)))
         .zIndex(1)
       }
+
+      #if canImport(Sparkle)
+      DashboardUpdateSessionOverlay()
+        .zIndex(2)
+      #endif
     }
     .animation(.easeOut(duration: 0.16), value: chrome.isGlobalSearchPresented)
     .preferredColorScheme(.dark)
