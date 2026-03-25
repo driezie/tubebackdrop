@@ -27,9 +27,9 @@
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 
-	<!-- Sparkle: set SUFeedURL to your deployed appcast (e.g. Vercel). -->
+	<!-- Sparkle: production appcast (Vercel project tubebackdrop / driezie-studio). Confirm under Vercel → Domains if this 404s. -->
 	<key>SUFeedURL</key>
-	<string>https://tubebackdrop-updates.vercel.app/appcast.xml</string>
+	<string>https://tubebackdrop.vercel.app/appcast.xml</string>
 	<!-- Public EdDSA key; must pair with SPARKLE_ED_PRIVATE_KEY in GitHub Actions. Regenerate with scripts/sparkle-bootstrap.sh if you fork. -->
 	<key>SUPublicEDKey</key>
 	<string>ebw8Ta45e2apMH/TyjQ6C+Jg6zzkYMNXD15064E9MNA=</string>
