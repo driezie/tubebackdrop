@@ -50,12 +50,13 @@ function getJson(url) {
 
 async function main() {
   fs.mkdirSync(outDir, { recursive: true })
-  const url = `https://api.github.com/repos/${repo}/releases/latest`
+  // `/releases/latest` ignores prereleases. Ad-hoc CI builds mark releases prerelease=true → API 404.
+  const listUrl = `https://api.github.com/repos/${repo}/releases?per_page=15`
 
   let payload = { ok: false, reason: "unknown", repo }
 
   try {
-    const { status, body, errorBody } = await getJson(url)
+    const { status, body, errorBody } = await getJson(listUrl)
     if (status === 403 || status === 429) {
       payload = {
         ok: false,
@@ -66,7 +67,7 @@ async function main() {
         releasesUrl: `https://github.com/${repo}/releases`,
         detail: errorBody || "",
       }
-    } else if (status === 404 || !body) {
+    } else if (status !== 200 || !Array.isArray(body) || body.length === 0) {
       payload = {
         ok: false,
         reason: "no_releases",
@@ -76,22 +77,35 @@ async function main() {
         actionsUrl: `https://github.com/${repo}/actions`,
       }
     } else {
-      const assets = body.assets || []
-      const zip = assets.find((a) => /\.zip$/i.test(a.name))
-      payload = {
-        ok: true,
-        repo,
-        tag_name: body.tag_name,
-        name: body.name,
-        published_at: body.published_at,
-        html_url: body.html_url,
-        zip: zip
-          ? { name: zip.name, url: zip.browser_download_url, size: zip.size }
-          : null,
-        releasesUrl: `https://github.com/${repo}/releases`,
-      }
-      if (!zip && assets.length) {
-        payload.note = "Latest release has no .zip asset; check workflow upload."
+      const release = body.find((r) => !r.draft)
+      if (!release) {
+        payload = {
+          ok: false,
+          reason: "no_releases",
+          message: "No non-draft GitHub releases found.",
+          repo,
+          releasesUrl: `https://github.com/${repo}/releases`,
+          actionsUrl: `https://github.com/${repo}/actions`,
+        }
+      } else {
+        const assets = release.assets || []
+        const zip = assets.find((a) => /\.zip$/i.test(a.name))
+        payload = {
+          ok: true,
+          repo,
+          tag_name: release.tag_name,
+          name: release.name,
+          published_at: release.published_at,
+          html_url: release.html_url,
+          prerelease: Boolean(release.prerelease),
+          zip: zip
+            ? { name: zip.name, url: zip.browser_download_url, size: zip.size }
+            : null,
+          releasesUrl: `https://github.com/${repo}/releases`,
+        }
+        if (!zip && assets.length) {
+          payload.note = "Latest release has no .zip asset; check workflow upload."
+        }
       }
     }
   } catch (err) {
