@@ -60,8 +60,12 @@
             if (d.reason === "no_releases") {
               fail(
                 "No GitHub release published yet. After <strong>Release macOS</strong> succeeds, redeploy this site (or push any commit) so the download refreshes.",
-                '<p class="muted">Open <a href="' + (d.actionsUrl || "#") + '">Actions</a> and fix <code>release-macos.yml</code> if it failed. Needs secret <code>SPARKLE_ED_PRIVATE_KEY</code>.</p>'
+                '<p class="muted">Open <a href="' + (d.actionsUrl || "#") + '">Actions</a> → <strong>Release macOS</strong>. Common fix: Sparkle embed path in <code>App/project.yml</code> (DerivedData). Needs secret <code>SPARKLE_ED_PRIVATE_KEY</code>.</p>'
               )
+              return
+            }
+            if (d.reason === "github_api_limited") {
+              fail(d.message || "GitHub API rate limited.", '<p class="muted">In Vercel → Project → Settings → Environment Variables, add <code>GITHUB_TOKEN</code> (PAT with repo read).</p>')
               return
             }
             fail(d.message || "Could not load release info.", "")

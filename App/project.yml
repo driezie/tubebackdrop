@@ -39,10 +39,20 @@ targets:
         shell: /bin/bash
         script: |
           set -eo pipefail
-          ROOT="$(cd "${BUILD_DIR}/../.." && pwd)"
-          FW=$(find "$ROOT/SourcePackages/artifacts" -path "*/Sparkle.xcframework/*/Sparkle.framework" -type d 2>/dev/null | head -1)
+          # SourcePackages lives next to Build/ under the DerivedData project dir.
+          # BUILD_DIR is usually .../Build/Products/Release — need three levels up, not two.
+          FW=""
+          for ROOT_CAND in "${TARGET_BUILD_DIR}/../../.." "${BUILD_DIR}/../../.." "${BUILD_DIR}/../.."; do
+            [[ -d "$ROOT_CAND" ]] || continue
+            CAND=$(find "$ROOT_CAND/SourcePackages/artifacts" -path "*/Sparkle.xcframework/*/Sparkle.framework" -type d 2>/dev/null | head -1)
+            if [[ -n "$CAND" && -d "$CAND" ]]; then
+              FW="$CAND"
+              break
+            fi
+          done
           if [[ -z "${FW:-}" || ! -d "$FW" ]]; then
             echo "error: Could not locate Sparkle.framework under SourcePackages/artifacts"
+            echo "hint: TARGET_BUILD_DIR=$TARGET_BUILD_DIR BUILD_DIR=$BUILD_DIR"
             exit 1
           fi
           APP="${TARGET_BUILD_DIR}/${WRAPPER_NAME}"

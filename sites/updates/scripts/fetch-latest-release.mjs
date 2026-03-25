@@ -29,6 +29,10 @@ function getJson(url) {
             resolve({ status: 404, body: null })
             return
           }
+          if (res.statusCode === 403 || res.statusCode === 429) {
+            resolve({ status: res.statusCode, body: null, errorBody: body.slice(0, 400) })
+            return
+          }
           if (res.statusCode !== 200) {
             reject(new Error(`HTTP ${res.statusCode}: ${body.slice(0, 200)}`))
             return
@@ -51,8 +55,18 @@ async function main() {
   let payload = { ok: false, reason: "unknown", repo }
 
   try {
-    const { status, body } = await getJson(url)
-    if (status === 404 || !body) {
+    const { status, body, errorBody } = await getJson(url)
+    if (status === 403 || status === 429) {
+      payload = {
+        ok: false,
+        reason: "github_api_limited",
+        message:
+          "GitHub API rate limit (common for Vercel builds). Add env GITHUB_TOKEN in Vercel (fine-grained PAT: read access to this repo’s metadata/contents).",
+        repo,
+        releasesUrl: `https://github.com/${repo}/releases`,
+        detail: errorBody || "",
+      }
+    } else if (status === 404 || !body) {
       payload = {
         ok: false,
         reason: "no_releases",
