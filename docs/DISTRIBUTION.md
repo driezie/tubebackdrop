@@ -64,7 +64,24 @@ If you **fork** this repo, generate your own pair:
 
 Workflow: [`.github/workflows/deploy-release.yml`](../.github/workflows/deploy-release.yml).
 
-**Actions → Deploy release → Run workflow**
+**From the terminal** (requires [GitHub CLI](https://cli.github.com/) `gh auth login`):
+
+```bash
+cd "/Users/admin/background maker"
+./scripts/deploy-release.sh patch    # or: minor | major — waits with dots, then gh run watch
+./scripts/deploy-release.sh set 1.2.0   # exact X.Y.Z
+./scripts/deploy-release.sh --no-watch patch   # fire-and-forget
+```
+
+Raw `gh` (watch latest deploy-release run yourself):
+
+```bash
+gh workflow run deploy-release.yml --repo driezie/tubebackdrop -f bump=patch
+sleep 3
+gh run watch "$(gh run list --workflow=deploy-release.yml --repo driezie/tubebackdrop -L 1 --json databaseId -q '.[0].databaseId')" --repo driezie/tubebackdrop --exit-status
+```
+
+**In the GitHub UI:** **Actions → Deploy release → Run workflow**
 
 1. Choose branch (usually `main`).
 2. Pick **patch** / **minor** / **major**, or set **exact version** `X.Y.Z` (overrides bump).
@@ -95,6 +112,8 @@ Workflow: [`.github/workflows/release-macos.yml`](../.github/workflows/release-m
 After a successful run, the workflow commits an updated Sparkle feed to [`sites/updates/public/appcast.xml`](../sites/updates/public/appcast.xml) on the default branch (for Vercel to redeploy). Use a **git tag** that matches the release you want (e.g. `v1.0.1`); the enclosure URL uses that tag. Keep `MARKETING_VERSION` in Xcode aligned with the tag for consistent zip names (`TubeBackdrop-1.0.1.zip`).
 
 **Optional — force Vercel after appcast push:** in the Vercel project → Settings → Git → Deploy Hooks, create a hook for **Production**, then add repository secret **`VERCEL_DEPLOY_HOOK_URL`** with the hook URL. If unset, a normal Git-connected Vercel project still redeploys when the appcast commit hits the default branch.
+
+**“No releases” on GitHub:** Vercel “deployments” are **not** GitHub Releases. The zip appears under **Releases** only after **[Release macOS](../.github/workflows/release-macos.yml)** completes for a `v*.*.*` tag (triggered by [Deploy release](../.github/workflows/deploy-release.yml) or a manual tag). Open **Actions**, fix any failed **Release macOS** run (common: missing `SPARKLE_ED_PRIVATE_KEY`, signing, or branch protection blocking the appcast push). The Vercel home page download button reads **`latest.json`**, generated at build time from the GitHub API — after the first successful release, redeploy Vercel (or push a commit) so the button updates.
 
 If **branch protection** blocks direct pushes to `main`, allow GitHub Actions to push, or adjust the workflows (e.g. open a PR for the version bump / appcast).
 

@@ -9,3 +9,12 @@ After deploy, set **`SUFeedURL`** in `App/Info.plist` to:
 `https://<your-deployment>.vercel.app/appcast.xml`
 
 The release workflow commits an updated `public/appcast.xml` here on each version tag.
+
+### Download link on the site
+
+Each Vercel build runs `scripts/fetch-latest-release.mjs`, which calls the GitHub API and writes **`dist/latest.json`**. The home page reads it and shows a **Download** button for the latest `.zip` on the release.
+
+- **GitHub Releases** (not Vercel) host the binary. If [Releases](https://github.com/driezie/tubebackdrop/releases) is empty, fix **Actions → Release macOS** (needs `SPARKLE_ED_PRIVATE_KEY`, etc.).
+- After the first successful release, trigger a Vercel redeploy (or push a commit) so `latest.json` is regenerated.
+
+Optional Vercel env: **`GITHUB_REPO`** (`owner/name`, default `driezie/tubebackdrop`), **`GITHUB_TOKEN`** (for private repos or API rate limits).

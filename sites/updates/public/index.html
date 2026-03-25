@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>TubeBackdrop — updates</title>
+  <title>TubeBackdrop — updates &amp; download</title>
   <style>
     :root { color-scheme: light dark; }
     body { font-family: ui-sans-serif, system-ui, sans-serif; max-width: 42rem; margin: 2.5rem auto; padding: 0 1.25rem; line-height: 1.55; }
@@ -11,16 +11,94 @@
     code { font-size: 0.9em; background: color-mix(in srgb, CanvasText 8%, transparent); padding: 0.12em 0.35em; border-radius: 4px; }
     a { color: CanvasText; }
     .card { margin-top: 1.25rem; padding: 1rem 1.1rem; border-radius: 10px; border: 1px solid color-mix(in srgb, CanvasText 14%, transparent); }
+    .btn {
+      display: inline-block; margin-top: 0.5rem; padding: 0.55rem 1rem; border-radius: 8px;
+      background: color-mix(in srgb, CanvasText 12%, transparent);
+      text-decoration: none; font-weight: 600;
+    }
+    .btn:hover { background: color-mix(in srgb, CanvasText 18%, transparent); }
+    .muted { opacity: 0.85; font-size: 0.92rem; }
+    #download-status { min-height: 3rem; }
+    .warn { color: #b45309; }
+    @media (prefers-color-scheme: dark) { .warn { color: #fbbf24; } }
   </style>
 </head>
 <body>
   <h1>TubeBackdrop</h1>
-  <p>The macOS app checks this site for Sparkle updates.</p>
-  <ul>
-    <li><a href="/appcast.xml"><code>appcast.xml</code></a> — Sparkle feed (updated by GitHub Actions on each release tag)</li>
-  </ul>
+  <p>macOS app — Sparkle reads the appcast here; the zip comes from <strong>GitHub Releases</strong> (not Vercel).</p>
+
   <div class="card">
-    <p><strong>Installers:</strong> <a href="https://github.com/driezie/tubebackdrop/releases">GitHub Releases</a> (zip). This site only serves <code>appcast.xml</code> for Sparkle. The macOS app’s <code>SUFeedURL</code> points here: <code>https://tubebackdrop.vercel.app/appcast.xml</code>.</p>
+    <h2 style="font-size:1.1rem;margin:0 0 0.5rem 0;">Download</h2>
+    <div id="download-status" class="muted">Loading latest release…</div>
+    <p class="muted" style="margin-top:0.75rem;margin-bottom:0;">
+      <a href="https://github.com/driezie/tubebackdrop/releases">All releases</a>
+      · <a href="https://github.com/driezie/tubebackdrop/actions">Actions</a>
+    </p>
   </div>
+
+  <ul>
+    <li><a href="/appcast.xml"><code>appcast.xml</code></a> — Sparkle update feed (refreshed when CI cuts a release)</li>
+  </ul>
+
+  <div class="card">
+    <p class="muted" style="margin:0;"><strong>Production URL</strong> for the app: <code>https://tubebackdrop.vercel.app/appcast.xml</code> (or your team URL). Set <code>SUFeedURL</code> in the app to match.</p>
+  </div>
+
+  <script>
+    (function () {
+      var el = document.getElementById("download-status")
+      function fail(msg, links) {
+        el.innerHTML = '<p class="warn">' + msg + '</p>' + (links || '')
+      }
+      fetch("/latest.json", { cache: "no-store" })
+        .then(function (r) {
+          if (!r.ok) throw new Error("latest.json " + r.status)
+          return r.json()
+        })
+        .then(function (d) {
+          if (!d.ok) {
+            if (d.reason === "no_releases") {
+              fail(
+                "No GitHub release published yet. After <strong>Release macOS</strong> succeeds, redeploy this site (or push any commit) so the download refreshes.",
+                '<p class="muted">Open <a href="' + (d.actionsUrl || "#") + '">Actions</a> and fix <code>release-macos.yml</code> if it failed. Needs secret <code>SPARKLE_ED_PRIVATE_KEY</code>.</p>'
+              )
+              return
+            }
+            fail(d.message || "Could not load release info.", "")
+            return
+          }
+          if (d.zip && d.zip.url) {
+            el.innerHTML =
+              '<p><a class="btn" href="' +
+              d.zip.url +
+              '" download>Download ' +
+              escapeHtml(d.zip.name) +
+              "</a></p>" +
+              '<p class="muted">Version <code>' +
+              escapeHtml(d.tag_name || "") +
+              "</code>" +
+              (d.published_at ? " · " + escapeHtml(d.published_at.slice(0, 10)) : "") +
+              '</p><p class="muted"><a href="' +
+              (d.html_url || d.releasesUrl) +
+              '">Release notes on GitHub</a></p>'
+            return
+          }
+          el.innerHTML =
+            '<p class="warn">Latest release has no .zip attachment.</p><p class="muted"><a href="' +
+            (d.html_url || d.releasesUrl) +
+            '">Open on GitHub</a></p>'
+        })
+        .catch(function () {
+          fail("Could not load <code>/latest.json</code>. Run a new Vercel deployment after the first successful release.", "")
+        })
+
+      function escapeHtml(s) {
+        return String(s)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/"/g, "&quot;")
+      }
+    })()
+  </script>
 </body>
 </html>
