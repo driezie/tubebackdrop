@@ -19,15 +19,17 @@ concurrency:
   cancel-in-progress: true
 
 env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
   SPARKLE_TOOLS_TAG: "2.6.4"
   APPCAST_PATH: sites/updates/public/appcast.xml
 
 jobs:
   release:
-    runs-on: macos-14
+    # macos-14 defaults to Xcode 15.4; local dev often uses much newer Xcode → CI-only Swift/build failures (xcodebuild exit 65).
+    runs-on: macos-15
     steps:
       # workflow_dispatch cannot use refs/tags/... here: checkout fails before our steps if the tag does not exist yet.
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           ref: ${{ github.event_name == 'workflow_dispatch' && github.event.repository.default_branch || github.ref }}
           fetch-depth: 0
@@ -101,13 +103,13 @@ jobs:
         run: cd App && xcodegen generate
 
       # Homebrew often ships XcodeGen 2.44.x: defaults to objectVersion 77 and ignores projectFormat (2.45+).
-      # macos-14 runners use Xcode 15.4, which cannot open format 77.
-      - name: Coerce pbxproj for Xcode 15 runner
+      # Older Xcode on the runner cannot open format 77 — keep this as a safety net.
+      - name: Coerce pbxproj for older Xcode on runner
         run: |
           set -eo pipefail
           PBX="$GITHUB_WORKSPACE/App/TubeBackdrop.xcodeproj/project.pbxproj"
           if grep -q 'objectVersion = 77' "$PBX"; then
-            echo "::warning::Patching objectVersion 77 → 60 for Xcode 15.4 (brew XcodeGen without projectFormat support)."
+            echo "::warning::Patching objectVersion 77 → 60 (brew XcodeGen without projectFormat support)."
             sed -i '' 's/objectVersion = 77;/objectVersion = 60;/' "$PBX"
             sed -i '' 's/compatibilityVersion = "Xcode 16[^"]*"/compatibilityVersion = "Xcode 15.0"/' "$PBX" || true
           fi
@@ -128,12 +130,13 @@ jobs:
               CODE_SIGN_IDENTITY="Developer ID Application" \
               build
           else
+            # Manual + "-" ad-hoc signing: avoids Automatic signing with an empty DEVELOPMENT_TEAM (often fails on CI as xcodebuild exit 65).
             xcodebuild -scheme TubeBackdrop -configuration Release \
               -destination "generic/platform=macOS" \
               -derivedDataPath "${DERIVED}" \
+              CODE_SIGN_STYLE=Manual \
               CODE_SIGN_IDENTITY="-" \
-              CODE_SIGNING_REQUIRED=NO \
-              CODE_SIGNING_ALLOWED=NO \
+              DEVELOPMENT_TEAM="" \
               ENABLE_HARDENED_RUNTIME=NO \
               build
           fi
@@ -219,7 +222,7 @@ jobs:
           cat release_notes.md
 
       - name: Create GitHub Release and upload asset
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v2.6.1
         with:
           tag_name: ${{ steps.ver.outputs.tag }}
           files: ${{ steps.zip.outputs.zip_path }}
