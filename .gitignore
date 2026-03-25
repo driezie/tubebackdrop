@@ -1,0 +1,16 @@
+.DS_Store
+.cursor/
+*.app/
+TubeBackdrop.app/
+.build/
+.swiftpm/
+*.xcuserstate
+xcuserdata/
+
+*.p12
+*.mobileprovision
+AuthKey*.p8
+sparkle_private*.txt
+ed.key
+sites/updates/dist
+sites/updates/node_modules

@@ -1,0 +1,442 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1A40D7852F480E7CF4D4C6C6 /* DatabaseToolbarSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2185A5EAC27FF97E34839CF /* DatabaseToolbarSearch.swift */; };
+		1ADCFF62AA0D1BDE6F65A797 /* DashboardSidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2901819141B8A06BEC2B968D /* DashboardSidebar.swift */; };
+		31524D96648E97C6DFB4E0EA /* OrganizationSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB88D59994DF1416DBB9D98B /* OrganizationSnapshot.swift */; };
+		3A7AB9D77D59E31239112EA9 /* VideoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB2F9B707EE6872EB75797A /* VideoItem.swift */; };
+		3E72B386E8DD937200008E78 /* GlobalSearchPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2AC21EFD351B4904A4B2B5E /* GlobalSearchPalette.swift */; };
+		49E62B2AB2E69FCA08918CC7 /* DatabasesPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E5D629DCD886B9E69DFCE4 /* DatabasesPanel.swift */; };
+		54FBE8F79A84E341CFC0792C /* AppMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CD3687CD9BC2D4EAEEA234 /* AppMetadata.swift */; };
+		58C5CCE1550891CD7770BC21 /* AppChromeState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27D921F84DEDC8AAF056F33 /* AppChromeState.swift */; };
+		73B3E04E1C3A0C5C3C279FD2 /* VideoStore+Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = D681607017FEA23C8ED7FC55 /* VideoStore+Search.swift */; };
+		764B53274BB8F6B3930DD660 /* AddVideoPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9454C9D41816337B1D846C6 /* AddVideoPanel.swift */; };
+		7AE98839BD8211427B907637 /* VideoStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8728A5EB4966CB240283EA3E /* VideoStore.swift */; };
+		81BDBABF82ECA37918EE4EF3 /* DashboardShellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7466B594DBC4F6EEC9F1E525 /* DashboardShellView.swift */; };
+		905BC7DCA5697FF1A0724D1D /* TubeBackdropApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B776ECDE67D99ACFBF4CB0C3 /* TubeBackdropApp.swift */; };
+		AEB587A5E2EA9AC4139D24F9 /* DatabaseFilenameParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDAA97D1081D85EF4F6920CA /* DatabaseFilenameParser.swift */; };
+		B45D97605B3CBBA9CF25F60A /* LibraryPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506E6D61869708605865B606 /* LibraryPanel.swift */; };
+		B9C210DCC9BBE26ECC171B76 /* WallpaperController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35E503A88581022F38C44222 /* WallpaperController.swift */; };
+		BD969E8FD6BCD41439DF141A /* LinkedDatabaseExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C531C7E4E504DD4A3F0B00A5 /* LinkedDatabaseExporter.swift */; };
+		CA90750F58B7D7AD0A6C7650 /* WallpaperPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFE4C20CE16C7661E461ACBA /* WallpaperPanel.swift */; };
+		E6DAAF0B99EE417446DA1CBA /* SparkleAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 529C497C0BD74224619D882F /* SparkleAppDelegate.swift */; };
+		F065FFBF8B5AE0E58F63BE0E /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 5E2F4267FEA6EBCBAC6FE58D /* Sparkle */; };
+		F231C95230A2D3AE66E4814C /* ImportDatabaseSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F07218C370A40CF610F8D4 /* ImportDatabaseSheet.swift */; };
+		F95F5681E2019D7522FFEF52 /* OrganizationModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8639CFC10E0142C59DE7D5A2 /* OrganizationModels.swift */; };
+		FF1F477E1D02BC7921A08D12 /* YouTubeDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D92283D5C6D165070D796C9 /* YouTubeDownloader.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		03CD3687CD9BC2D4EAEEA234 /* AppMetadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMetadata.swift; sourceTree = "<group>"; };
+		0FB2F9B707EE6872EB75797A /* VideoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoItem.swift; sourceTree = "<group>"; };
+		24FDC260D3CF062C9996721E /* TubeBackdrop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TubeBackdrop.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2901819141B8A06BEC2B968D /* DashboardSidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardSidebar.swift; sourceTree = "<group>"; };
+		35E503A88581022F38C44222 /* WallpaperController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperController.swift; sourceTree = "<group>"; };
+		506E6D61869708605865B606 /* LibraryPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryPanel.swift; sourceTree = "<group>"; };
+		529C497C0BD74224619D882F /* SparkleAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparkleAppDelegate.swift; sourceTree = "<group>"; };
+		7466B594DBC4F6EEC9F1E525 /* DashboardShellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardShellView.swift; sourceTree = "<group>"; };
+		8639CFC10E0142C59DE7D5A2 /* OrganizationModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizationModels.swift; sourceTree = "<group>"; };
+		8728A5EB4966CB240283EA3E /* VideoStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoStore.swift; sourceTree = "<group>"; };
+		9D92283D5C6D165070D796C9 /* YouTubeDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YouTubeDownloader.swift; sourceTree = "<group>"; };
+		A2185A5EAC27FF97E34839CF /* DatabaseToolbarSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseToolbarSearch.swift; sourceTree = "<group>"; };
+		AB88D59994DF1416DBB9D98B /* OrganizationSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizationSnapshot.swift; sourceTree = "<group>"; };
+		B776ECDE67D99ACFBF4CB0C3 /* TubeBackdropApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TubeBackdropApp.swift; sourceTree = "<group>"; };
+		C531C7E4E504DD4A3F0B00A5 /* LinkedDatabaseExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkedDatabaseExporter.swift; sourceTree = "<group>"; };
+		C5E5D629DCD886B9E69DFCE4 /* DatabasesPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabasesPanel.swift; sourceTree = "<group>"; };
+		CFE4C20CE16C7661E461ACBA /* WallpaperPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperPanel.swift; sourceTree = "<group>"; };
+		D681607017FEA23C8ED7FC55 /* VideoStore+Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VideoStore+Search.swift"; sourceTree = "<group>"; };
+		E27D921F84DEDC8AAF056F33 /* AppChromeState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppChromeState.swift; sourceTree = "<group>"; };
+		E5F07218C370A40CF610F8D4 /* ImportDatabaseSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportDatabaseSheet.swift; sourceTree = "<group>"; };
+		E9454C9D41816337B1D846C6 /* AddVideoPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddVideoPanel.swift; sourceTree = "<group>"; };
+		EDAA97D1081D85EF4F6920CA /* DatabaseFilenameParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseFilenameParser.swift; sourceTree = "<group>"; };
+		F2AC21EFD351B4904A4B2B5E /* GlobalSearchPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalSearchPalette.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		88D5340EE9D0C3699A33B1CF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F065FFBF8B5AE0E58F63BE0E /* Sparkle in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		5F37BAA2E0D40CDB30972D9F /* TubeBackdrop */ = {
+			isa = PBXGroup;
+			children = (
+				E9454C9D41816337B1D846C6 /* AddVideoPanel.swift */,
+				E27D921F84DEDC8AAF056F33 /* AppChromeState.swift */,
+				03CD3687CD9BC2D4EAEEA234 /* AppMetadata.swift */,
+				7466B594DBC4F6EEC9F1E525 /* DashboardShellView.swift */,
+				2901819141B8A06BEC2B968D /* DashboardSidebar.swift */,
+				EDAA97D1081D85EF4F6920CA /* DatabaseFilenameParser.swift */,
+				C5E5D629DCD886B9E69DFCE4 /* DatabasesPanel.swift */,
+				A2185A5EAC27FF97E34839CF /* DatabaseToolbarSearch.swift */,
+				F2AC21EFD351B4904A4B2B5E /* GlobalSearchPalette.swift */,
+				E5F07218C370A40CF610F8D4 /* ImportDatabaseSheet.swift */,
+				506E6D61869708605865B606 /* LibraryPanel.swift */,
+				C531C7E4E504DD4A3F0B00A5 /* LinkedDatabaseExporter.swift */,
+				8639CFC10E0142C59DE7D5A2 /* OrganizationModels.swift */,
+				AB88D59994DF1416DBB9D98B /* OrganizationSnapshot.swift */,
+				529C497C0BD74224619D882F /* SparkleAppDelegate.swift */,
+				B776ECDE67D99ACFBF4CB0C3 /* TubeBackdropApp.swift */,
+				0FB2F9B707EE6872EB75797A /* VideoItem.swift */,
+				8728A5EB4966CB240283EA3E /* VideoStore.swift */,
+				D681607017FEA23C8ED7FC55 /* VideoStore+Search.swift */,
+				35E503A88581022F38C44222 /* WallpaperController.swift */,
+				CFE4C20CE16C7661E461ACBA /* WallpaperPanel.swift */,
+				9D92283D5C6D165070D796C9 /* YouTubeDownloader.swift */,
+			);
+			name = TubeBackdrop;
+			path = ../Sources/TubeBackdrop;
+			sourceTree = "<group>";
+		};
+		6017BFB98CC3E491A3C034AE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				24FDC260D3CF062C9996721E /* TubeBackdrop.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		88AEC8E41EB1CA7D9AB7F241 = {
+			isa = PBXGroup;
+			children = (
+				5F37BAA2E0D40CDB30972D9F /* TubeBackdrop */,
+				6017BFB98CC3E491A3C034AE /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B1B7ED22D7698D800ABB4462 /* TubeBackdrop */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A84AEA98AF1F23A4298B0697 /* Build configuration list for PBXNativeTarget "TubeBackdrop" */;
+			buildPhases = (
+				0AC65B8E178266AF3C1220A3 /* Sources */,
+				2F2D3444C5EE7855C7DB1A1B /* Embed Sparkle.framework */,
+				88D5340EE9D0C3699A33B1CF /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TubeBackdrop;
+			packageProductDependencies = (
+				5E2F4267FEA6EBCBAC6FE58D /* Sparkle */,
+			);
+			productName = TubeBackdrop;
+			productReference = 24FDC260D3CF062C9996721E /* TubeBackdrop.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		37A59DFD8A8C7A05D8EB7A33 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					B1B7ED22D7698D800ABB4462 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 7A42F07FAE6847B9533D3728 /* Build configuration list for PBXProject "TubeBackdrop" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 88AEC8E41EB1CA7D9AB7F241;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				6EDBCB93BB355DCFD9BA8F61 /* XCRemoteSwiftPackageReference "Sparkle" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 6017BFB98CC3E491A3C034AE /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B1B7ED22D7698D800ABB4462 /* TubeBackdrop */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		2F2D3444C5EE7855C7DB1A1B /* Embed Sparkle.framework */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Sparkle.framework";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "set -eo pipefail\nROOT=\"$(cd \"${BUILD_DIR}/../..\" && pwd)\"\nFW=$(find \"$ROOT/SourcePackages/artifacts\" -path \"*/Sparkle.xcframework/*/Sparkle.framework\" -type d 2>/dev/null | head -1)\nif [[ -z \"${FW:-}\" || ! -d \"$FW\" ]]; then\n  echo \"error: Could not locate Sparkle.framework under SourcePackages/artifacts\"\n  exit 1\nfi\nAPP=\"${TARGET_BUILD_DIR}/${WRAPPER_NAME}\"\nDEST=\"${APP}/Contents/Frameworks\"\nmkdir -p \"$DEST\"\nrsync -a \"$FW\" \"$DEST/\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		0AC65B8E178266AF3C1220A3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				764B53274BB8F6B3930DD660 /* AddVideoPanel.swift in Sources */,
+				58C5CCE1550891CD7770BC21 /* AppChromeState.swift in Sources */,
+				54FBE8F79A84E341CFC0792C /* AppMetadata.swift in Sources */,
+				81BDBABF82ECA37918EE4EF3 /* DashboardShellView.swift in Sources */,
+				1ADCFF62AA0D1BDE6F65A797 /* DashboardSidebar.swift in Sources */,
+				AEB587A5E2EA9AC4139D24F9 /* DatabaseFilenameParser.swift in Sources */,
+				1A40D7852F480E7CF4D4C6C6 /* DatabaseToolbarSearch.swift in Sources */,
+				49E62B2AB2E69FCA08918CC7 /* DatabasesPanel.swift in Sources */,
+				3E72B386E8DD937200008E78 /* GlobalSearchPalette.swift in Sources */,
+				F231C95230A2D3AE66E4814C /* ImportDatabaseSheet.swift in Sources */,
+				B45D97605B3CBBA9CF25F60A /* LibraryPanel.swift in Sources */,
+				BD969E8FD6BCD41439DF141A /* LinkedDatabaseExporter.swift in Sources */,
+				F95F5681E2019D7522FFEF52 /* OrganizationModels.swift in Sources */,
+				31524D96648E97C6DFB4E0EA /* OrganizationSnapshot.swift in Sources */,
+				E6DAAF0B99EE417446DA1CBA /* SparkleAppDelegate.swift in Sources */,
+				905BC7DCA5697FF1A0724D1D /* TubeBackdropApp.swift in Sources */,
+				3A7AB9D77D59E31239112EA9 /* VideoItem.swift in Sources */,
+				73B3E04E1C3A0C5C3C279FD2 /* VideoStore+Search.swift in Sources */,
+				7AE98839BD8211427B907637 /* VideoStore.swift in Sources */,
+				B9C210DCC9BBE26ECC171B76 /* WallpaperController.swift in Sources */,
+				CA90750F58B7D7AD0A6C7650 /* WallpaperPanel.swift in Sources */,
+				FF1F477E1D02BC7921A08D12 /* YouTubeDownloader.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		997EB1B42E6963C592F35AB7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = TubeBackdrop.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.tubebackdrop.TubeBackdrop;
+				PRODUCT_NAME = TubeBackdrop;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		BBD3EF28156784BF8B780447 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = TubeBackdrop.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.tubebackdrop.TubeBackdrop;
+				PRODUCT_NAME = TubeBackdrop;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		D579DD3022C30709DECAE237 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = TubeBackdrop.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+		F3FDC5ECA5F3E33142029B7C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = TubeBackdrop.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		7A42F07FAE6847B9533D3728 /* Build configuration list for PBXProject "TubeBackdrop" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F3FDC5ECA5F3E33142029B7C /* Debug */,
+				D579DD3022C30709DECAE237 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A84AEA98AF1F23A4298B0697 /* Build configuration list for PBXNativeTarget "TubeBackdrop" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BBD3EF28156784BF8B780447 /* Debug */,
+				997EB1B42E6963C592F35AB7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		6EDBCB93BB355DCFD9BA8F61 /* XCRemoteSwiftPackageReference "Sparkle" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sparkle-project/Sparkle";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.6.4;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		5E2F4267FEA6EBCBAC6FE58D /* Sparkle */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6EDBCB93BB355DCFD9BA8F61 /* XCRemoteSwiftPackageReference "Sparkle" */;
+			productName = Sparkle;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 37A59DFD8A8C7A05D8EB7A33 /* Project object */;
+}

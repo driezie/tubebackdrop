@@ -1,0 +1,7 @@
+{
+  "name": "tubebackdrop-updates",
+  "private": true,
+  "scripts": {
+    "build": "rm -rf dist && mkdir -p dist && cp public/appcast.xml dist/appcast.xml && cp public/index.html dist/index.html"
+  }
+}

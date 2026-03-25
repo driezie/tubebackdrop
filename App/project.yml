@@ -1,0 +1,65 @@
+name: TubeBackdrop
+options:
+  bundleIdPrefix: com.tubebackdrop
+  deploymentTarget:
+    macOS: "13.0"
+  xcodeVersion: "15.0"
+  groupSortPosition: top
+
+settings:
+  base:
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    MACOSX_DEPLOYMENT_TARGET: "13.0"
+    SWIFT_VERSION: "5.9"
+    DEVELOPMENT_TEAM: ""
+    CODE_SIGN_STYLE: Automatic
+    CODE_SIGN_ENTITLEMENTS: TubeBackdrop.entitlements
+
+packages:
+  Sparkle:
+    url: https://github.com/sparkle-project/Sparkle
+    from: 2.6.4
+
+targets:
+  TubeBackdrop:
+    type: application
+    platform: macOS
+    sources:
+      - path: ../Sources/TubeBackdrop
+        excludes:
+          - "**/.DS_Store"
+    dependencies:
+      - package: Sparkle
+        product: Sparkle
+        embed: false
+    postCompileScripts:
+      - name: Embed Sparkle.framework
+        basedOnDependencyAnalysis: false
+        shell: /bin/bash
+        script: |
+          set -eo pipefail
+          ROOT="$(cd "${BUILD_DIR}/../.." && pwd)"
+          FW=$(find "$ROOT/SourcePackages/artifacts" -path "*/Sparkle.xcframework/*/Sparkle.framework" -type d 2>/dev/null | head -1)
+          if [[ -z "${FW:-}" || ! -d "$FW" ]]; then
+            echo "error: Could not locate Sparkle.framework under SourcePackages/artifacts"
+            exit 1
+          fi
+          APP="${TARGET_BUILD_DIR}/${WRAPPER_NAME}"
+          DEST="${APP}/Contents/Frameworks"
+          mkdir -p "$DEST"
+          rsync -a "$FW" "$DEST/"
+    settings:
+      base:
+        PRODUCT_NAME: TubeBackdrop
+        PRODUCT_BUNDLE_IDENTIFIER: com.tubebackdrop.TubeBackdrop
+        INFOPLIST_FILE: Info.plist
+        ENABLE_HARDENED_RUNTIME: YES
+    entitlements:
+      path: TubeBackdrop.entitlements
+
+schemes:
+  TubeBackdrop:
+    build:
+      targets:
+        TubeBackdrop: all

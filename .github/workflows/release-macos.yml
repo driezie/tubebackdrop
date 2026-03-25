@@ -1,0 +1,237 @@
+name: Release macOS
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      version_tag:
+        description: "Tag to release (e.g. v1.0.1); must exist on remote"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-macos-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  SPARKLE_TOOLS_TAG: "2.6.4"
+  APPCAST_PATH: sites/updates/public/appcast.xml
+
+jobs:
+  release:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && format('refs/tags/{0}', inputs.version_tag) || github.ref }}
+          fetch-depth: 0
+
+      - name: Require Sparkle signing key
+        env:
+          SPARKLE_KEY: ${{ secrets.SPARKLE_ED_PRIVATE_KEY }}
+        run: |
+          test -n "${SPARKLE_KEY}" || { echo "::error::Missing secret SPARKLE_ED_PRIVATE_KEY (generate with scripts/sparkle-bootstrap.sh and add to repo secrets)"; exit 1; }
+
+      - name: Detect code signing mode
+        id: signmode
+        env:
+          CERT: ${{ secrets.APPLE_CERTIFICATE_BASE64 }}
+          CERT_PW: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          TEAM: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          if [ -n "${CERT}" ] && [ -n "${CERT_PW}" ] && [ -n "${TEAM}" ]; then
+            echo "mode=developer_id" >> "$GITHUB_OUTPUT"
+            echo "Using Developer ID signing (Apple Developer Program)."
+          else
+            echo "mode=adhoc" >> "$GITHUB_OUTPUT"
+            echo "::warning::No full Apple signing secrets — using ad-hoc build. Releases work for Sparkle, but downloaded apps show Gatekeeper warnings without Developer ID + notarization."
+          fi
+
+      - name: Install xcodegen
+        run: brew install xcodegen
+
+      - name: Import signing certificate
+        if: steps.signmode.outputs.mode == 'developer_id'
+        env:
+          APPLE_CERTIFICATE_BASE64: ${{ secrets.APPLE_CERTIFICATE_BASE64 }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+        run: |
+          KEYCHAIN_PASSWORD="$(openssl rand -hex 32)"
+          echo "KEYCHAIN_PASSWORD=${KEYCHAIN_PASSWORD}" >> "$GITHUB_ENV"
+          KEYCHAIN="${RUNNER_TEMP}/build.keychain"
+          security create-keychain -p "${KEYCHAIN_PASSWORD}" "${KEYCHAIN}"
+          security set-keychain-settings -lut 21600 "${KEYCHAIN}"
+          security unlock-keychain -p "${KEYCHAIN_PASSWORD}" "${KEYCHAIN}"
+          security list-keychains -d user -s "${KEYCHAIN}"
+          security default-keychain -s "${KEYCHAIN}"
+          echo "${APPLE_CERTIFICATE_BASE64}" | base64 --decode > "${RUNNER_TEMP}/certificate.p12"
+          security import "${RUNNER_TEMP}/certificate.p12" -k "${KEYCHAIN}" -P "${APPLE_CERTIFICATE_PASSWORD}" -T /usr/bin/codesign -T /usr/bin/security
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "${KEYCHAIN_PASSWORD}" "${KEYCHAIN}"
+
+      - name: Generate Xcode project
+        run: cd App && xcodegen generate
+
+      - name: Build Release
+        env:
+          DEVELOPMENT_TEAM: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          set -eo pipefail
+          DERIVED="${RUNNER_TEMP}/DerivedData"
+          cd App
+          if [ "${{ steps.signmode.outputs.mode }}" = "developer_id" ]; then
+            xcodebuild -scheme TubeBackdrop -configuration Release \
+              -destination "generic/platform=macOS" \
+              -derivedDataPath "${DERIVED}" \
+              DEVELOPMENT_TEAM="${DEVELOPMENT_TEAM}" \
+              CODE_SIGN_IDENTITY="Developer ID Application" \
+              build
+          else
+            xcodebuild -scheme TubeBackdrop -configuration Release \
+              -destination "generic/platform=macOS" \
+              -derivedDataPath "${DERIVED}" \
+              CODE_SIGN_IDENTITY="-" \
+              CODE_SIGNING_REQUIRED=NO \
+              CODE_SIGNING_ALLOWED=NO \
+              ENABLE_HARDENED_RUNTIME=NO \
+              build
+          fi
+          echo "APP_PATH=${DERIVED}/Build/Products/Release/TubeBackdrop.app" >> "$GITHUB_ENV"
+
+      - name: Optional notarize (staple)
+        env:
+          NOTARY_KEY_P8: ${{ secrets.NOTARY_KEY_P8 }}
+          NOTARY_KEY_ID: ${{ secrets.NOTARY_KEY_ID }}
+          NOTARY_ISSUER_ID: ${{ secrets.NOTARY_ISSUER_ID }}
+        run: |
+          set -eo pipefail
+          if [ -z "${NOTARY_KEY_P8}" ] || [ -z "${NOTARY_KEY_ID}" ] || [ -z "${NOTARY_ISSUER_ID}" ]; then
+            echo "Skipping notarization (optional secrets NOTARY_KEY_P8, NOTARY_KEY_ID, NOTARY_ISSUER_ID not all set)."
+            exit 0
+          fi
+          KEY="${RUNNER_TEMP}/AuthKey.p8"
+          echo "${NOTARY_KEY_P8}" > "${KEY}"
+          chmod 600 "${KEY}"
+          SUBMIT_ZIP="${RUNNER_TEMP}/notary-submit.zip"
+          ditto -c -k --sequesterRsrc --keepParent "${APP_PATH}" "${SUBMIT_ZIP}"
+          xcrun notarytool submit "${SUBMIT_ZIP}" --wait \
+            --key "${KEY}" \
+            --key-id "${NOTARY_KEY_ID}" \
+            --issuer "${NOTARY_ISSUER_ID}"
+          xcrun stapler staple "${APP_PATH}"
+
+      - name: Version metadata
+        id: ver
+        run: |
+          SHORT=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "${APP_PATH}/Contents/Info.plist")
+          BUILD=$(/usr/libexec/PlistBuddy -c "Print CFBundleVersion" "${APP_PATH}/Contents/Info.plist")
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            TAG="${{ inputs.version_tag }}"
+          else
+            TAG="${GITHUB_REF_NAME}"
+          fi
+          TAG="${TAG#refs/tags/}"
+          echo "short=${SHORT}" >> "$GITHUB_OUTPUT"
+          echo "build=${BUILD}" >> "$GITHUB_OUTPUT"
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+
+      - name: Create distribution zip
+        id: zip
+        run: |
+          set -eo pipefail
+          NAME="TubeBackdrop-${{ steps.ver.outputs.short }}.zip"
+          OUT="${RUNNER_TEMP}/${NAME}"
+          ditto -c -k --sequesterRsrc --keepParent "${APP_PATH}" "${OUT}"
+          echo "zip_path=${OUT}" >> "$GITHUB_OUTPUT"
+          echo "zip_name=${NAME}" >> "$GITHUB_OUTPUT"
+          echo "length=$(stat -f%z "${OUT}")" >> "$GITHUB_OUTPUT"
+
+      - name: Download Sparkle sign_update
+        run: |
+          set -eo pipefail
+          curl -sL -o "${RUNNER_TEMP}/sparkle.tar.xz" \
+            "https://github.com/sparkle-project/Sparkle/releases/download/${SPARKLE_TOOLS_TAG}/Sparkle-${SPARKLE_TOOLS_TAG}.tar.xz"
+          tar -xf "${RUNNER_TEMP}/sparkle.tar.xz" -C "${RUNNER_TEMP}" bin/sign_update
+          chmod +x "${RUNNER_TEMP}/bin/sign_update"
+
+      - name: Sparkle sign update
+        id: sparkle
+        env:
+          SPARKLE_ED_PRIVATE_KEY: ${{ secrets.SPARKLE_ED_PRIVATE_KEY }}
+        run: |
+          set -eo pipefail
+          KEYFILE="${RUNNER_TEMP}/sparkle_ed.key"
+          printf '%s' "${SPARKLE_ED_PRIVATE_KEY}" > "${KEYFILE}"
+          chmod 600 "${KEYFILE}"
+          OUT=$("${RUNNER_TEMP}/bin/sign_update" --ed-key-file "${KEYFILE}" "${{ steps.zip.outputs.zip_path }}")
+          echo "${OUT}"
+          SIG=$(echo "${OUT}" | python3 "${GITHUB_WORKSPACE}/scripts/parse_sign_update.py")
+          echo "signature=${SIG}" >> "$GITHUB_OUTPUT"
+
+      - name: Write release notes (changelog)
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          chmod +x scripts/release-notes-body.sh
+          bash scripts/release-notes-body.sh "${{ steps.ver.outputs.tag }}" "${GITHUB_WORKSPACE}/release_notes.md"
+          echo "--- release_notes.md ---"
+          cat release_notes.md
+
+      - name: Create GitHub Release and upload asset
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.ver.outputs.tag }}
+          files: ${{ steps.zip.outputs.zip_path }}
+          body_path: release_notes.md
+          generate_release_notes: false
+          fail_on_unmatched_files: true
+          prerelease: ${{ steps.signmode.outputs.mode == 'adhoc' }}
+
+      - name: Render appcast
+        run: |
+          set -eo pipefail
+          TAG="${{ steps.ver.outputs.tag }}"
+          URL="https://github.com/${{ github.repository }}/releases/download/${TAG}/${{ steps.zip.outputs.zip_name }}"
+          python3 "${GITHUB_WORKSPACE}/scripts/render_appcast.py" \
+            --short-version "${{ steps.ver.outputs.short }}" \
+            --bundle-version "${{ steps.ver.outputs.build }}" \
+            --enclosure-url "${URL}" \
+            --length "${{ steps.zip.outputs.length }}" \
+            --signature "${{ steps.sparkle.outputs.signature }}" \
+            --min-macos "13.0" \
+            --github-repo "${{ github.repository }}" \
+            --output "${RUNNER_TEMP}/appcast.xml"
+
+      - name: Commit appcast to default branch
+        run: |
+          set -eo pipefail
+          BRANCH="${{ github.event.repository.default_branch }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin "${BRANCH}"
+          git checkout "${BRANCH}"
+          git pull origin "${BRANCH}" --ff-only
+          mkdir -p "$(dirname "${APPCAST_PATH}")"
+          cp "${RUNNER_TEMP}/appcast.xml" "${APPCAST_PATH}"
+          git add "${APPCAST_PATH}"
+          if git diff --staged --quiet; then
+            echo "No appcast changes to commit."
+            exit 0
+          fi
+          git commit -m "chore: update Sparkle appcast for ${{ steps.ver.outputs.tag }}"
+          git push origin "${BRANCH}"
+
+      - name: Trigger Vercel deploy hook (optional)
+        env:
+          VERCEL_DEPLOY_HOOK_URL: ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}
+        run: |
+          set -eo pipefail
+          if [ -z "${VERCEL_DEPLOY_HOOK_URL}" ]; then
+            echo "No VERCEL_DEPLOY_HOOK_URL secret — relying on Vercel Git integration for deploy."
+            exit 0
+          fi
+          curl -fsS -X POST "${VERCEL_DEPLOY_HOOK_URL}"

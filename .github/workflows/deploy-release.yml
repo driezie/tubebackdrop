@@ -1,0 +1,85 @@
+name: Deploy release
+
+# One-click: bump version in App/project.yml, push to branch, tag → triggers Release macOS (build, GitHub Release + changelog, appcast, optional Vercel hook).
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: "Which part of X.Y.Z to increment"
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+        default: patch
+      exact_version:
+        description: "Optional exact version X.Y.Z (leave empty to use bump instead)"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: deploy-release-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  version-and-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Sync branch
+        run: git pull --rebase origin "${{ github.ref_name }}"
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Bump App/project.yml
+        id: bump
+        run: |
+          set -eo pipefail
+          if [ -n "${{ inputs.exact_version }}" ]; then
+            OUT=$(python3 scripts/bump-version.py patch --set-version "${{ inputs.exact_version }}")
+          else
+            OUT=$(python3 scripts/bump-version.py "${{ inputs.bump }}")
+          fi
+          MARK=$(echo "$OUT" | head -1)
+          BUILD=$(echo "$OUT" | tail -1)
+          echo "marketing=${MARK}" >> "$GITHUB_OUTPUT"
+          echo "build=${BUILD}" >> "$GITHUB_OUTPUT"
+          echo "tag=v${MARK}" >> "$GITHUB_OUTPUT"
+
+      - name: Commit version bump
+        run: |
+          set -eo pipefail
+          git add App/project.yml
+          if git diff --staged --quiet; then
+            echo "::error::No staged changes after bump (unexpected)."
+            exit 1
+          fi
+          git commit -m "chore(release): ${{ steps.bump.outputs.tag }}"
+          git push origin "${{ github.ref_name }}"
+
+      - name: Create and push tag
+        run: |
+          set -eo pipefail
+          git tag "${{ steps.bump.outputs.tag }}"
+          git push origin "${{ steps.bump.outputs.tag }}"
+
+      - name: Summary
+        run: |
+          echo "### Deploy release started" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "- **Tag:** \`${{ steps.bump.outputs.tag }}\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- **Marketing / build:** ${{ steps.bump.outputs.marketing }} (${{ steps.bump.outputs.build }})" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "Wait for **Release macOS** to finish: build, GitHub Release with changelog, appcast commit, optional Vercel hook." >> "$GITHUB_STEP_SUMMARY"
