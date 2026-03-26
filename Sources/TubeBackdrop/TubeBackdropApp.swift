@@ -9,6 +9,7 @@ struct TubeBackdropApp: App {
   @StateObject private var store = VideoStore()
   @StateObject private var wallpaper = WallpaperController()
   @StateObject private var chrome = AppChromeState()
+  @StateObject private var githubSession = GitHubSession()
 
   var body: some Scene {
     WindowGroup {
@@ -16,6 +17,7 @@ struct TubeBackdropApp: App {
         .environmentObject(store)
         .environmentObject(wallpaper)
         .environmentObject(chrome)
+        .environmentObject(githubSession)
         .frame(minWidth: 880, minHeight: 560)
     }
     .windowStyle(.automatic)
@@ -42,11 +44,16 @@ struct TubeBackdropApp: App {
           chrome.sidebarSelection = .wallpaper
         }
         .keyboardShortcut("4", modifiers: [.command])
+
+        Button("Settings") {
+          chrome.sidebarSelection = .settings
+        }
+        .keyboardShortcut("5", modifiers: [.command])
       }
 
       CommandGroup(after: .toolbar) {
         Button("Search Library…") {
-          chrome.isGlobalSearchPresented = true
+          chrome.presentCommandPalette(mode: .global)
         }
         .keyboardShortcut("k", modifiers: .command)
       }

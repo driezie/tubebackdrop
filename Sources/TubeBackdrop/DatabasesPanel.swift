@@ -186,8 +186,7 @@ struct DatabasesPanel: View {
   private var listControls: some View {
     VStack(alignment: .leading, spacing: 10) {
       HStack(spacing: 12) {
-        TextField("Filter by name, file, project…", text: $listFilterText)
-          .textFieldStyle(.roundedBorder)
+        CustomQueryField(placeholder: "Filter by name, file, project…", text: $listFilterText)
           .frame(minWidth: 200)
         Picker("Project", selection: $filterProjectId) {
           Text("All projects").tag(nil as UUID?)
@@ -203,9 +202,13 @@ struct DatabasesPanel: View {
           }
         }
         .frame(minWidth: 100)
-        TextField("Type (.sql)", text: $filterExtension)
-          .textFieldStyle(.roundedBorder)
-          .frame(width: 100)
+        CustomQueryField(
+          placeholder: "Type (.sql)",
+          text: $filterExtension,
+          systemImage: "doc.badge.ellipsis",
+          font: .system(size: 12, weight: .regular)
+        )
+        .frame(width: 116)
         Picker("Sort", selection: $sortMode) {
           ForEach(LinkedDatabaseSortMode.allCases) { m in
             Text(m.title).tag(m)

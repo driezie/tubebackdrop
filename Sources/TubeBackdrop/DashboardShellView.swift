@@ -5,6 +5,7 @@ struct DashboardShellView: View {
   @EnvironmentObject private var store: VideoStore
   @EnvironmentObject private var wallpaper: WallpaperController
   @EnvironmentObject private var chrome: AppChromeState
+  @EnvironmentObject private var githubSession: GitHubSession
 
   @State private var dashboardImportDraft: DatabaseImportDraft?
 
@@ -61,6 +62,11 @@ struct DashboardShellView: View {
       DashboardUpdateSessionOverlay()
         .zIndex(2)
       #endif
+
+      if GitHubOAuthConfig.isLoginGateEnabled, !githubSession.isSignedIn {
+        GitHubLoginGateOverlay(session: githubSession)
+          .zIndex(10)
+      }
     }
     .animation(.easeOut(duration: 0.16), value: chrome.isGlobalSearchPresented)
     .preferredColorScheme(.dark)
@@ -89,6 +95,8 @@ struct DashboardShellView: View {
       AddVideoPanel()
     case .wallpaper:
       WallpaperPanel()
+    case .settings:
+      SettingsPanel()
     }
   }
 

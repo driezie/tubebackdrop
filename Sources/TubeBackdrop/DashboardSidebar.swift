@@ -16,13 +16,19 @@ struct DashboardSidebar: View {
         .padding(.bottom, 18)
 
       VStack(alignment: .leading, spacing: 4) {
-        ForEach(SidebarSelection.allCases) { item in
+        ForEach(SidebarSelection.primarySections) { item in
           sidebarRow(item)
         }
       }
       .padding(.horizontal, 10)
 
       Spacer(minLength: 0)
+
+      VStack(alignment: .leading, spacing: 4) {
+        sidebarRow(.settings)
+      }
+      .padding(.horizontal, 10)
+      .padding(.bottom, 8)
 
       HStack(spacing: 8) {
         Circle()

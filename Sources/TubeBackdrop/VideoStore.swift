@@ -1,5 +1,7 @@
 import Foundation
 
+private let linkedYouTubeProfileDefaultsKey = "TubeBackdrop.linkedYouTubeProfileURL"
+
 @MainActor
 final class VideoStore: ObservableObject {
   @Published private(set) var items: [VideoItem] = []
@@ -9,6 +11,8 @@ final class VideoStore: ObservableObject {
   @Published var downloadMessage: String?
   /// 0...1 while a download is active; `nil` when idle.
   @Published var downloadProgress: Double?
+  /// Channel or profile page URL the user saved in Settings (local only).
+  @Published private(set) var linkedYouTubeProfileURL: String?
 
   private let fileManager = FileManager.default
   private var libraryDir: URL {
@@ -29,7 +33,25 @@ final class VideoStore: ObservableObject {
   init() {
     load()
     loadOrganization()
+    loadLinkedYouTubeProfile()
     ensureDefaultProject()
+  }
+
+  func setLinkedYouTubeProfileURL(_ raw: String?) {
+    let trimmed = raw?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+    let value = trimmed.isEmpty ? nil : trimmed
+    linkedYouTubeProfileURL = value
+    if let value {
+      UserDefaults.standard.set(value, forKey: linkedYouTubeProfileDefaultsKey)
+    } else {
+      UserDefaults.standard.removeObject(forKey: linkedYouTubeProfileDefaultsKey)
+    }
+  }
+
+  private func loadLinkedYouTubeProfile() {
+    let s = UserDefaults.standard.string(forKey: linkedYouTubeProfileDefaultsKey)?
+      .trimmingCharacters(in: .whitespacesAndNewlines)
+    linkedYouTubeProfileURL = (s?.isEmpty == true) ? nil : s
   }
 
   func videosDirectory() -> URL {

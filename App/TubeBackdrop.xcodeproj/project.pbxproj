@@ -16,6 +16,7 @@
 		49E62B2AB2E69FCA08918CC7 /* DatabasesPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E5D629DCD886B9E69DFCE4 /* DatabasesPanel.swift */; };
 		54FBE8F79A84E341CFC0792C /* AppMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CD3687CD9BC2D4EAEEA234 /* AppMetadata.swift */; };
 		58C5CCE1550891CD7770BC21 /* AppChromeState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27D921F84DEDC8AAF056F33 /* AppChromeState.swift */; };
+		C8F4A1B02E90123456789ABC /* CustomQueryField.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F4A1B12E90123456789ABC /* CustomQueryField.swift */; };
 		73B3E04E1C3A0C5C3C279FD2 /* VideoStore+Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = D681607017FEA23C8ED7FC55 /* VideoStore+Search.swift */; };
 		764B53274BB8F6B3930DD660 /* AddVideoPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9454C9D41816337B1D846C6 /* AddVideoPanel.swift */; };
 		7AE98839BD8211427B907637 /* VideoStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8728A5EB4966CB240283EA3E /* VideoStore.swift */; };
@@ -32,6 +33,7 @@
 		F231C95230A2D3AE66E4814C /* ImportDatabaseSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F07218C370A40CF610F8D4 /* ImportDatabaseSheet.swift */; };
 		F95F5681E2019D7522FFEF52 /* OrganizationModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8639CFC10E0142C59DE7D5A2 /* OrganizationModels.swift */; };
 		FF1F477E1D02BC7921A08D12 /* YouTubeDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D92283D5C6D165070D796C9 /* YouTubeDownloader.swift */; };
+		A3C4E5F60718293A4B5C6D7E /* SettingsPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4D5E6F708293A4B5C6D7E8F /* SettingsPanel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,8 +52,10 @@
 		A2185A5EAC27FF97E34839CF /* DatabaseToolbarSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseToolbarSearch.swift; sourceTree = "<group>"; };
 		AB88D59994DF1416DBB9D98B /* OrganizationSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizationSnapshot.swift; sourceTree = "<group>"; };
 		B776ECDE67D99ACFBF4CB0C3 /* TubeBackdropApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TubeBackdropApp.swift; sourceTree = "<group>"; };
+		B4D5E6F708293A4B5C6D7E8F /* SettingsPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPanel.swift; sourceTree = "<group>"; };
 		C531C7E4E504DD4A3F0B00A5 /* LinkedDatabaseExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkedDatabaseExporter.swift; sourceTree = "<group>"; };
 		C5E5D629DCD886B9E69DFCE4 /* DatabasesPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabasesPanel.swift; sourceTree = "<group>"; };
+		C8F4A1B12E90123456789ABC /* CustomQueryField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomQueryField.swift; sourceTree = "<group>"; };
 		C96F2EC760032A145EFD7F79 /* SparkleUpdateState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparkleUpdateState.swift; sourceTree = "<group>"; };
 		CFE4C20CE16C7661E461ACBA /* WallpaperPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperPanel.swift; sourceTree = "<group>"; };
 		D681607017FEA23C8ED7FC55 /* VideoStore+Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VideoStore+Search.swift"; sourceTree = "<group>"; };
@@ -85,6 +89,7 @@
 				9E34B4121B55E5E86A9E73B8 /* DashboardUpdateChrome.swift */,
 				EDAA97D1081D85EF4F6920CA /* DatabaseFilenameParser.swift */,
 				C5E5D629DCD886B9E69DFCE4 /* DatabasesPanel.swift */,
+				C8F4A1B12E90123456789ABC /* CustomQueryField.swift */,
 				A2185A5EAC27FF97E34839CF /* DatabaseToolbarSearch.swift */,
 				F2AC21EFD351B4904A4B2B5E /* GlobalSearchPalette.swift */,
 				E5F07218C370A40CF610F8D4 /* ImportDatabaseSheet.swift */,
@@ -93,6 +98,7 @@
 				8639CFC10E0142C59DE7D5A2 /* OrganizationModels.swift */,
 				AB88D59994DF1416DBB9D98B /* OrganizationSnapshot.swift */,
 				529C497C0BD74224619D882F /* SparkleAppDelegate.swift */,
+				B4D5E6F708293A4B5C6D7E8F /* SettingsPanel.swift */,
 				C96F2EC760032A145EFD7F79 /* SparkleUpdateState.swift */,
 				B776ECDE67D99ACFBF4CB0C3 /* TubeBackdropApp.swift */,
 				0FB2F9B707EE6872EB75797A /* VideoItem.swift */,
@@ -212,6 +218,7 @@
 				764B53274BB8F6B3930DD660 /* AddVideoPanel.swift in Sources */,
 				58C5CCE1550891CD7770BC21 /* AppChromeState.swift in Sources */,
 				54FBE8F79A84E341CFC0792C /* AppMetadata.swift in Sources */,
+				C8F4A1B02E90123456789ABC /* CustomQueryField.swift in Sources */,
 				81BDBABF82ECA37918EE4EF3 /* DashboardShellView.swift in Sources */,
 				1ADCFF62AA0D1BDE6F65A797 /* DashboardSidebar.swift in Sources */,
 				00F6846613422AC2F1F89533 /* DashboardUpdateChrome.swift in Sources */,
@@ -225,6 +232,7 @@
 				F95F5681E2019D7522FFEF52 /* OrganizationModels.swift in Sources */,
 				31524D96648E97C6DFB4E0EA /* OrganizationSnapshot.swift in Sources */,
 				E6DAAF0B99EE417446DA1CBA /* SparkleAppDelegate.swift in Sources */,
+				A3C4E5F60718293A4B5C6D7E /* SettingsPanel.swift in Sources */,
 				A8CA933A278D59138D82ECF6 /* SparkleUpdateState.swift in Sources */,
 				905BC7DCA5697FF1A0724D1D /* TubeBackdropApp.swift in Sources */,
 				3A7AB9D77D59E31239112EA9 /* VideoItem.swift in Sources */,

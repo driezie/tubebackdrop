@@ -1,12 +1,22 @@
 import SwiftUI
 
-enum SidebarSelection: String, CaseIterable, Identifiable {
+/// Which surface the command palette focuses when opened (⌘K vs toolbar Search).
+enum CommandPaletteMode: Equatable {
+  case global
+  case databases
+}
+
+enum SidebarSelection: String, Identifiable {
   case library
   case databases
   case addVideo
   case wallpaper
+  case settings
 
   var id: String { rawValue }
+
+  /// Main navigation items (top of sidebar). Settings is pinned at the bottom separately.
+  static let primarySections: [SidebarSelection] = [.library, .databases, .addVideo, .wallpaper]
 
   var title: String {
     switch self {
@@ -14,6 +24,7 @@ enum SidebarSelection: String, CaseIterable, Identifiable {
     case .databases: return "Databases"
     case .addVideo: return "Add video"
     case .wallpaper: return "Wallpaper"
+    case .settings: return "Settings"
     }
   }
 
@@ -23,6 +34,7 @@ enum SidebarSelection: String, CaseIterable, Identifiable {
     case .databases: return "cylinder.split.1x2"
     case .addVideo: return "plus.circle.fill"
     case .wallpaper: return "display.trianglebadge.exclamationmark"
+    case .settings: return "gearshape.fill"
     }
   }
 }
@@ -40,7 +52,16 @@ struct PendingDatabaseImport: Identifiable, Equatable {
 final class AppChromeState: ObservableObject {
   @Published var sidebarSelection: SidebarSelection = .library
   @Published var isGlobalSearchPresented = false
+  @Published var commandPaletteMode: CommandPaletteMode = .global
   @Published var searchQuery: String = ""
+
+  func presentCommandPalette(mode: CommandPaletteMode = .global) {
+    commandPaletteMode = mode
+    if mode == .databases {
+      searchQuery = ""
+    }
+    isGlobalSearchPresented = true
+  }
   /// Set when the user drops database files on the dashboard; presents import sheet.
   @Published var pendingDatabaseImport: PendingDatabaseImport?
 }
