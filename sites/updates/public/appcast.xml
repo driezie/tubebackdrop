@@ -6,13 +6,13 @@
     <description>Sparkle appcast for TubeBackdrop.</description>
     <language>en</language>
     <item>
-      <title>0.1.11</title>
+      <title>0.1.12</title>
       <description><![CDATA[]]></description>
-      <pubDate>Wed, 25 Mar 2026 17:30:51 +0000</pubDate>
-      <sparkle:version>12</sparkle:version>
-      <sparkle:shortVersionString>0.1.11</sparkle:shortVersionString>
+      <pubDate>Thu, 26 Mar 2026 07:41:44 +0000</pubDate>
+      <sparkle:version>13</sparkle:version>
+      <sparkle:shortVersionString>0.1.12</sparkle:shortVersionString>
       <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-      <enclosure url="https://github.com/driezie/tubebackdrop/releases/download/v0.1.11/TubeBackdrop-0.1.11.zip" length="2103288" type="application/octet-stream" sparkle:edSignature="GnRkcSmL4Utj21w4vlncMeBA9j+8pWfwx/9uY1RWFft4Tzn+ldUQhlKz4LpIXnX6cASC0LVKgeKUFS2SKbeDDw==" />
+      <enclosure url="https://github.com/driezie/tubebackdrop/releases/download/v0.1.12/TubeBackdrop-0.1.12.zip" length="2235892" type="application/octet-stream" sparkle:edSignature="I6t1b/uNDbH+jHMR2wx28YWgUV1ohimpyupmOUDWMgOD71WmsEuAEp4vuWRV8s7nVKLPVToI1TdFKltI1ptxBw==" />
     </item>
   </channel>
 </rss>
